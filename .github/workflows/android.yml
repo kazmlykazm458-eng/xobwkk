@@ -4,11 +4,11 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4 # تم التحديث إلى v4
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5 # تم التحديث إلى v5
         with:
-          python-code: '3.10'
+          python-version: '3.10'
       - name: Install Buildozer
         run: |
           sudo apt update
@@ -17,8 +17,7 @@ jobs:
       - name: Build with Buildozer
         run: buildozer android debug
       - name: Upload APK
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4 # هذا هو السطر الذي سبب الخطأ، قمنا بتحديثه لـ v4
         with:
           name: package
           path: bin/*.apk
-

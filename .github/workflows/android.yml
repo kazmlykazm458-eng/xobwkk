@@ -2,7 +2,8 @@ name: Build APK
 on: [push, pull_request]
 jobs:
   build:
-    runs-on: ubuntu-latest
+    # قمنا بتغيير النظام هنا إلى نسخة مستقرة ومجربة (22.04)
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
       - name: Set up Python
@@ -12,7 +13,6 @@ jobs:
       - name: Install Dependencies
         run: |
           sudo apt update
-          # قمنا بتحديث المكتبات هنا لتناسب النظام الجديد
           sudo apt install -y git zip unzip autoconf automake libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev cmake libffi-dev libssl-dev
           pip install --user --upgrade buildozer cython==0.29.33
       - name: Build with Buildozer

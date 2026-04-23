@@ -1,32 +1,27 @@
-name: Build APK Premium
+name: Build APK
 
-on: 
+on:
   push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
-  workflow_dispatch:  # هذا السطر يسمح لك بتشغيل البناء يدوياً من واجهة GitHub
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-
-      # هذه هي الخطوة السحرية التي ستتولى كل شيء بشكل صحيح
-      - name: Build with Buildozer
-        uses: ArtemSBulgakov/buildozer-action@v1
-        id: buildozer
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
-          # تأكد من أن buildozer.spec موجود في المجلد الرئيسي لمشروعك
-          workdir: .       
-          # ننصحك باستخدام الإصدار 'master' لضمان الحصول على أحدث التحسينات
-          buildozer_version: master
-
-      # لتحميل ملف APK الناتج
-      - name: Upload APK Artifact
-        uses: actions/upload-artifact@v4
+          python-version: '3.11'
+      - name: Install buildozer
+        run: |
+          pip install buildozer cython
+          sudo apt update
+          sudo apt install -y openjdk-17-jdk
+      - name: Build APK
+        run: |
+          buildozer init
+          buildozer android debug
+      - uses: actions/upload-artifact@v4
         with:
-          name: ALi-Project-APK
-          path: ${{ steps.buildozer.outputs.filename }}
+          name: my-apk
+          path: bin/*.apk
